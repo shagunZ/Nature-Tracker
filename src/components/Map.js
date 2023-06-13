@@ -2,12 +2,16 @@ import GoogleMapReact from "google-map-react"
 import LocationMarker from "./LocationMarker"
 import Infobox from "./Infobox"
 import { useState } from "react"
-const Map = (eventData,center,zoom) => {
-    const [info,setInfo] = useState(null)
 
-    const markers = eventData.map(ev=>{
-        if(ev.categories[0].id===8){
-            return <LocationMarker lat={ev.geometries[0].coordinates[1]} lng={ev.geometries[0].coordinates[0]} onClick={()=>setInfo({id:ev.id,title:ev.title})}/>
+
+const NATURAL_EVENT_WILDFIRE = 8;
+
+const Map = ({eventData,center,zoom}) => {
+    const [locationinfo,setlocationInfo] = useState(null)
+
+    const markers = eventData.map((ev, index) => {
+        if(ev.categories[0].id === NATURAL_EVENT_WILDFIRE) {
+            return <LocationMarker key={index} lat={ev.geometries[0].coordinates[1]} lng={ev.geometries[0].coordinates[0]} onClick={() => setlocationInfo({ id: ev.id, title: ev.title })} />
         }
         return null
     })
@@ -23,7 +27,7 @@ const Map = (eventData,center,zoom) => {
         >
             {markers}
         </GoogleMapReact>
-        {Infobox && <Infobox info={info} />}
+        {locationinfo && <Infobox info={locationinfo} />}
     </div>
   )
 }
